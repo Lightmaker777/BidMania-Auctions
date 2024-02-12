@@ -1,0 +1,82 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<!-- Headline -->
+<div class="mx-5 my-2 container">
+    <div class="mx-5">
+        <h3>{{ headline }}</h3>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="mx-5 d-flex flex-wrap justify-content-evenly">
+{% if not auctions %}
+<div class="my-5">
+    <h1 class="my-5">No listing!</h1>
+</div>
+{% else %}
+    {% for auction in auctions %}
+    <a href="{% url 'listing' id=auction.id %}" class="row text-decoration-none">
+        <div class="p-3 mx-3 my-4 border-0 card rounded-0 position-relative" style="width: 15rem;">
+            <!-- Active listing -->
+            {%if auction.active == True %}
+                <!-- Active listing with image -->
+                {% if auction.image %}
+                <img src="{{ auction.image }}" class="card-img-top rounded-0 border-bottom" alt="{{ auction.title }}">
+                <!-- Active listing no image -->
+                {% else %}
+                <img src="https://i.imgur.com/vLDtrNC.jpg" class="card-img-top rounded-0 border-bottom" alt="{{ auction.title }}">
+                {% endif %}
+            <!-- Closed listing -->
+            {% else %}
+            <div class="position-relative">
+                <!-- Closed listing with image -->
+                {% if auction.image %}
+                <img src="{{ auction.image }}" class="card-img-top rounded-0 border-bottom" alt="{{ auction.title}}" style="filter: brightness(75%);">
+                <!-- Closed listing no image -->
+                {% else %}
+                <img src="https://i.imgur.com/vLDtrNC.jpg" class="card-img-top rounded-0 border-bottom" alt="{{ auction.title }}" style="filter: brightness(75%);">
+                {% endif %}
+                <!-- Overlay -->
+                <h6 class="display-fluid text-white position-absolute top-50 start-50 translate-middle">CLOSED</h6>
+            </div>
+            {% endif %}
+            <!-- Card body -->
+            <div class="card-body">
+                <h5 class="py-1 card-title">{{ auction.title }}</h5>
+                <p class="card-text text-truncate fw-light small">{{ auction.description }}</p>
+                <div class="mt-4 row">
+                    <div class="col-7 small">
+                        <!-- Bids -->
+                        {% if auction.num_of_bids != 0%}
+                        <div class="card-text text-start fw-normal small text-muted">
+                            {% if auction.num_of_bids == 1 %}
+                            {{ auction.num_of_bids }} bid
+                            {% else %}
+                            {{ auction.num_of_bids }} bids
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        <!-- Watchers -->
+                        {% if auction.num_of_watcher != 0 %}
+                        <div class="card-text text-start fw-normal small text-muted">
+                            {% if auction.num_of_watcher == 1%}
+                            {{ auction.num_of_watcher }} watcher
+                            {% else %}
+                            {{ auction.num_of_watcher }} watchers
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="col-5">
+                        <p class="card-text text-end fw-normal">{{ auction.current_bid }}€</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="my-5 container-fluid">
+    <!-- Image and details -->
+    <div class="mx-5 row border-0 border-bottom">
+        <!-- Image -->
+        <div class="px-5 py-4 col-md-7 col-lg-5">
+            <!-- Active listing -->
+            {% if auction.active == True %}
+            <img 
+            {% if auction.image %}
+            src="{{ auction.image }}"
+            {% else %}
+            src="https://i.imgur.com/vLDtrNC.jpg"
+            {% endif %}
+            class="img-fluid" alt="{{ auction.title }}">
+            <!-- Closed listing -->
+            {% else %}
+            <div class="position-relative">
+                <img 
+                {% if auction.image %}
+                src="{{ auction.image }}"
+                {% else %}
+                src="https://i.imgur.com/vLDtrNC.jpg"
+                {% endif %}
+                class="img-fluid" alt="{{ auction.title }}" style="filter: brightness(75%);">
+                <!-- Overlay -->
+                <h3 class="displaly-fluid text-white position-absolute top-50 start-50 translate-middle">CLOSED</h3>
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- Details -->
+        <div class="px-5 py-4 col-md-5 col-lg-7">
+            <!-- Breadcrumbs -->
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' opacity='50%' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
+                aria-label="breadcrumb" class="small text-muted b-crumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}"
+                            class="text-decoration-none text-secondary fw-bold opacity-50  text-uppercase">Listing</a></li>
+                    <li class="breadcrumb-item" aria-current="page">
+                        <a href="{% url 'listing_category' category_name=auction.category %}"
+                            class="text-decoration-none text-secondary fw-bold opacity-50 text-uppercase active">{{auction.category}}</a>
+                    </li>
+                </ol>
+            </nav>
+
+            <!-- Title -->
+            <div class="py-3 d-flex flex-wrap align-items-center border-0 border-bottom">
+                <h2>{{ auction.title }}</h2>
+            </div>
+
+            <!-- Description -->
+            <div class="py-3">
+                <div class="fw-light">{{ auction.description }}</div>
+            </div>
+
+            <!-- Bid -->
+            <div class="py-3">
+                <div class="my-2 fw-light">Listed by:<a href="{% url 'listed_by' username=auction.lister %}" class="ms-5 text-uppercase active small text-decoration-none text-secondary fw-bold">{{ auction.lister }}</a></div>
+                <div class="my-2 fw-light">Start bid:<span class="ms-5 text-uppercase active text-decoration-none text-secondary fw-bold">{{ auction.start_bid }}€</span></div>
+                {% if auction.current_bid and auction.highest_bidder %}
+                <div class="my-2 fw-light">Current bid:<span class="ms-4 text-uppercase active text-decoration-none text-secondary fw-bold"> {{ auction.current_bid }}€</span></div>
+                {% endif %}
+                <div class="d-flex flex-wrap">
+                    <!-- Bid -->
+                    <form action="{% url 'bid' id=auction.id %}" method="POST" class="py-2 col-lg-6 col-md-12 col-sm-6 col-12">
+                        {% csrf_token %}
+                        <div class="d-flex flex-wrap justify-content-center">
+                            <div class="input-group">
+                                <span class="mb-3 border input-group-text rounded-0 border-0 border border-bottom">€</span>
+                                <input type="number" class="mb-3 rounded-0 border-0 border border-bottom form-control" name="bid" placeholder="Your bid" autocomplete="off">
+                            </div>
+                            <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Bid">
+                        </div>
+                    </form>
+
+                    <!-- Wishlist / Close listing -->
+                    <div class="py-2 col-lg-6 col-md-12 col-sm-6 col-12 d-flex flex-wrap align-items-end justify-content-center">
+                        <!-- Close listing -->
+                        {% if user == auction.lister and auction.active == True %}
+                        <form action="{% url 'close' id=auction.id %}" method="POST">
+                            {% csrf_token %}
+                            <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Close Listing" name="close">
+                        </form>
+
+                        <!-- Activate listing -->
+                        {% elif user == auction.lister and auction.active == False %}
+                        <form action="{% url 'activate' id=auction.id %}" method="POST">
+                            {% csrf_token %}
+                            <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Activate Listing" name="open">
+                        </form>
+
+                        <!-- Add to watchlist / remove from watchlist -->
+                        {% else %}
+                        <form action="{% url 'watchlist' id=auction.id %}" method="POST">
+                            {% csrf_token %}
+                            <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit"
+                            {% if user in auction.watcher.all %}
+                            value="Remove"
+                            {% else %}
+                            value="Watch"
+                            {% endif %}>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message -->
+            <div class="text-muted small text-center">
+                {% if message %}
+                {{ message }}
+                {% elif auction.active == False and user == auction.highest_bidder %}
+                You won this auction!
+                {% elif auction.active == False and user == auction.lister %}
+                Listing closed!
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment -->
+    <div class="mx-5 row">
+        <!-- Comment form -->
+        <div class="px-5 py-3 col-md-7 col-lg-5">
+            <form action="{% url 'comment' id=auction.id %}" method="POST" class="my-4">
+                {% csrf_token %}
+                <textarea class="mb-3 rounded-0 border-0 border border-bottom form-control i_desc" rows="3" name="comment" placeholder="Add comment"></textarea>
+                <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Post">
+            </form>
+        </div>
+
+        <!-- Listing's comments -->
+        <div class="px-5 py-3 col-md-5 col-lg-7">
+            {% if not comments %}
+            <div class="fw-light text-center">
+                No comments.
+            </div>
+            {% else %}
+                {% for comment in comments %}
+                {% if auction.lister != comment.user %}
+                <div class="d-flex border-0 border-bottom py-3 justify-content-start text-start">
+                {% else %}
+                <div class="d-flex border-0 border-bottom py-3 justify-content-end text-end">
+                {% endif %}
+                    <div>
+                        <div class="fw-bold">{{ comment.user }}</div>
+                        <div class="mb-2 small opacity-50 fw-light">{{ comment.date }}</div>
+                        <div class="fw-light ">{{comment.comment}}</div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<!-- Headline -->
+<div class="mx-5 my-2 container">
+    <div class="mx-5">
+        <h3>{{ headline }}</h3>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="m-5 d-flex flex-wrap justify-content-evenly mx-auto w-100 text-center">
+    {% for category in categories %}
+    <div class="mb-2 d-block col-4">
+        <div class="btn btn-sm btn-dark border rounded-3 text-uppercase text-decoration-none text-light fw-bold opacity-75 px-3">
+            <a href="{% url 'listing_category' category_name=category %}"
+               class="text-uppercase text-decoration-none text-light fw-bold opacity-75">{{ category }}</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

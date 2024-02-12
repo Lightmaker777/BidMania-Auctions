@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<!-- Headline -->
+<div class="mx-5 my-2 container">
+    <div class="mx-5">
+        <h3>{{ headline }}</h3>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="mx-5">
+    <form action="{% url 'register' %}" method="post" class="mx-5 my-4 px-2 col-lg-6 col-md-8">
+        {% csrf_token %}
+        <div class="mb-3 form-group">
+            <input class="mb-3 rounded-0 border-0 border border-bottom form-control" autofocus type="text" name="username" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="mb-3 form-group">
+            <input class="mb-3 rounded-0 border-0 border border-bottom form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="mb-3 form-group">
+            <input class="mb-3 rounded-0 border-0 border border-bottom form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="mb-3 form-group">
+            <input class="mb-3 rounded-0 border-0 border border-bottom form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+        <div class="my-4 row">
+            <div class="col-4">
+                <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Register">
+            </div>
+            <div class="mt-1 col-8">
+                {% if message %}
+                <div class="text-muted small">{{ message }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+    <p class="mx-5 my-4 mb-0 px-2 fw-light">Already have an account?<a href="{% url 'login' %}" class="fw-bold nav-link d-inline mx-1">Log In here.</a></p>
+</div>
+{% endblock %}
