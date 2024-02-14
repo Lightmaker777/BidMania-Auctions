@@ -21,5 +21,7 @@ urlpatterns = [
     path("mybids", views.my_bids, name="my_bids"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
-    path("register", views.register, name="register")
+    path("register", views.register, name="register"),
+    path("live_auctions",views.live_auctions, name="live_auctions"),
+    path("create_live_auctions", views.create_live_auctions, name="create_live_auctions"),
 ]

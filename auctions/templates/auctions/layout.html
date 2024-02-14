@@ -48,6 +48,10 @@
                         <li class="nav-item">
                             <a class="me-2 nav-link" href="{% url 'create' %}">Create Listing</a>
                         </li>
+                        <!-- Create Live-Auctions -->
+                        <li class="nav-item">
+                            <a class="me-2 nav-link" href="{% url 'create_live_auctions' %}">Create Live-Auctions</a>
+                        </li>
                     </ul>
 
                     <!-- Account -->
@@ -57,6 +61,11 @@
                             <i class="me-1 bi bi-person-fill"></i>{{ user.username }}
                         </div>
                         <ul class="dropdown-menu">
+                            <li class="nav-item">
+                                <a class="text-decoration-none dropdown-item" href="{% url 'live_auctions' %}">
+                                    My Live-Auctions
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="text-decoration-none dropdown-item" href="{% url 'my_listings' %}">
                                     My Listings

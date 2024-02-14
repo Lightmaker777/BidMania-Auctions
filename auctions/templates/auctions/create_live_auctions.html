@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<!-- Headline -->
+<div class="mx-5 my-2 container">
+    <div class="mx-5">
+        <h3>{{ headline }}</h3>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="mx-5">
+    <form action="{% url 'create_live_auctions' %}" method="post" class="mx-5 my-4 px-2 col-lg-6 col-md-8">
+        {% csrf_token %}
+        <!-- Title -->
+        <div class="mb-3 form-group">
+            <input type="text" autofocus class="mb-3 rounded-0 border-0 border border-bottom form-control" name="title" placeholder="Title" autocomplete="off">
+        </div>
+
+{% endblock %}

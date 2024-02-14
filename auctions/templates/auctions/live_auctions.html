@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body>
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+<div id="twitch-embed"></div>
+<script type="text/javascript">
+    var player = new Twitch.Player("twitch-embed", {
+        channel: "BidmaniaAuctions",
+        // or video: "your_twitch_video_id"
+    });
+    player.setVolume(0.5);
+</script>
+</body>
+</html>
+
+{% endblock %}
+

@@ -8,6 +8,27 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Auction, Category, Bid, Comment
 
 
+from twitch import TwitchClient
+
+def twitch_authenticate(request):
+    client = TwitchClient(client_id=settings.TWITCH_CLIENT_ID, client_secret=settings.TWITCH_CLIENT_SECRET)
+
+    # Redirect the user to Twitch for authentication
+    return redirect(client.authorize_url(redirect_uri='https://randomstring.ngrok.io/twitch/callback', scopes=['user_read']))
+
+def twitch_callback(request):
+    client = TwitchClient(client_id=settings.TWITCH_CLIENT_ID, client_secret=settings.TWITCH_CLIENT_SECRET)
+
+    # Exchange the code for an access token
+    code = request.GET.get('code', None)
+    token, refresh_token = client.exchange_code(code, 'https://randomstring.ngrok.io/twitch/callback')
+    
+    # Store the token in your database or session for future use
+
+    return render(request, 'success_page.html')
+
+
+
 # Active listings
 def index(request):
     return render(request, "auctions/index.html", {
@@ -22,6 +43,39 @@ def all(request):
         "auctions": Auction.objects.all(),
         "headline": "All Listings"
     })
+
+# All active live auction listings
+def live_auctions(request):
+    return render(request, "auctions/live_auctions.html", {
+        "auctions": Auction.objects.all(),
+        "headline": "All Live Auction Shows"
+    })
+
+# Create live auction shows
+@login_required(login_url='login')
+def create_live_auctions(request):
+    if request.method == "GET":
+        return render(request, "auctions/create_live_auctions.html", {
+            "categories": Category.objects.all(),
+            "headline": "Create Live Events",
+        })
+    else:
+        title = request.POST['title']
+        description = request.POST['description']
+        start_bid = request.POST['start_bid']
+        live_auction = request.POST['live-auction']
+        category = Category.objects.get(category=request.POST['category'])
+        new_listing = Auction(
+            title=title,
+            description=description,
+            start_bid=start_bid,
+            live_auction=live_auction,
+            category=category,
+            lister=request.user)
+        new_listing.save()
+        return redirect("index")
+
+
 
 
 # Closed listings

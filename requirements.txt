@@ -7,3 +7,4 @@ pillow==10.2.0
 requests==2.31.0
 sqlparse==0.4.4
 urllib3==2.2.0
+python-twitch-client==0.7.1
