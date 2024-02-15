@@ -14,9 +14,9 @@ ALLOWED_HOSTS = ['*']
 # TWITCH
 TWITCH_CLIENT_ID = '3nqzs3ob4gw8u5a0g7ra5vnw7g7b7h'
 TWITCH_CLIENT_SECRET = 'rk8mx0aaocloi9ymp4ap80qz27iegj'
-TWITCH_REDIRECT_URI = 'https://2006-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app'
+TWITCH_REDIRECT_URI = 'https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app'
 CSRF_TRUSTED_ORIGINS = [
-    "https://2006-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app",
+    "https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app",
     # Add other trusted origins if needed
 ]
 # Application definition

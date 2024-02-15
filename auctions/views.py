@@ -14,14 +14,14 @@ def twitch_authenticate(request):
     client = TwitchClient(client_id=settings.TWITCH_CLIENT_ID, client_secret=settings.TWITCH_CLIENT_SECRET)
 
     # Redirect the user to Twitch for authentication
-    return redirect(client.authorize_url(redirect_uri='https://randomstring.ngrok.io/twitch/callback', scopes=['user_read']))
+    return redirect(client.authorize_url(redirect_uri='https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app', scopes=['user_read']))
 
 def twitch_callback(request):
     client = TwitchClient(client_id=settings.TWITCH_CLIENT_ID, client_secret=settings.TWITCH_CLIENT_SECRET)
 
     # Exchange the code for an access token
     code = request.GET.get('code', None)
-    token, refresh_token = client.exchange_code(code, 'https://randomstring.ngrok.io/twitch/callback')
+    token, refresh_token = client.exchange_code(code, 'https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app')
     
     # Store the token in your database or session for future use
 
