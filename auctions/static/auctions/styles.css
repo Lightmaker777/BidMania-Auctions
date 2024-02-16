@@ -1,9 +1,9 @@
 body {
     padding: 0px;
-    background-color: rgb(245, 228, 201);
+    background-image: linear-gradient(to bottom right, rgb(234, 240, 253), rgb(242, 235, 184));
     /*background-color: rgb(110, 90, 30);*/
-
 }
+
 
 :root {
     --maintransition: all 0.3s linear;

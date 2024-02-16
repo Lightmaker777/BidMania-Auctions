@@ -17,7 +17,7 @@
 {% else %}
     {% for auction in auctions %}
     <a href="{% url 'listing' id=auction.id %}" class="row text-decoration-none">
-        <div class="p-3 mx-3 my-4 border-0 card rounded-4 position-relative bg-transparent" style="width: 15rem;">
+        <div class="p-3 mx-3 my-4 border-0 card rounded-4 position-relative" style="width: 15rem; background-color: rgba(255, 255, 255, 0.3);">
             <!-- Active listing -->
             {%if auction.active == True %}
                 <!-- Active listing with image -->
