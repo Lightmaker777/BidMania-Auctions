@@ -1,6 +1,9 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<script src="https://www.paypal.com/sdk/js?client-id=AcLFF1ok9PHl5en6m2cFI9T2O33Ngy0E3BAKrnJpdVPUdnhCOAah5D_EzJVau-XEjcJir2-Mkoxm8rHx&currency=EUR"></script>
+
+
 <div class="my-5 container-fluid">
     <!-- Image and details -->
     <div class="mx-5 row border-0 border-bottom">
@@ -65,47 +68,82 @@
                 <div class="my-2 fw-light">Current bid:<span class="ms-4 text-uppercase active text-decoration-none text-secondary fw-bold"> {{ auction.current_bid }}€</span></div>
                 {% endif %}
                 <div class="d-flex flex-wrap">
+
+                    
                     <!-- Bid -->
-                    <form action="{% url 'bid' id=auction.id %}" method="POST" class="py-2 col-lg-6 col-md-12 col-sm-6 col-12">
-                        {% csrf_token %}
-                        <div class="d-flex flex-wrap justify-content-center">
-                            <div class="input-group">
-                                <span class="mb-3 border input-group-text rounded-0 border-0 border border-bottom">€</span>
-                                <input type="number" class="mb-3 rounded-0 border-0 border border-bottom form-control" name="bid" placeholder="Your bid" autocomplete="off">
-                            </div>
-                            <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Bid">
-                        </div>
-                    </form>
+<form action="{% url 'bid' id=auction.id %}" method="POST" class="py-2 col-lg-3 col-md-12 col-sm-6 col-12 order-lg-1 order-md-2 order-sm-2 order-2">
+    
+    {% csrf_token %}
+    <div class="d-flex flex-wrap justify-content-start">
+        
+        <div class="input-group">
+            <span class="mb-3 border input-group-text rounded-0 border-0 border border-bottom">€</span>
+            <input type="number" class="mb-3 rounded-0 border-0 border border-bottom form-control" name="bid" placeholder="Your bid" autocomplete="off">
+        </div>
+        
+        <input class="btn btn-sm btn-dark border rounded-2 text-uppercase text-decoration-none text-light fw-bold opacity-75" type="submit" value="Bid Now">
+        
+    </div>
+    
+</form>
 
-                    <!-- Wishlist / Close listing -->
-                    <div class="py-2 col-lg-6 col-md-12 col-sm-6 col-12 d-flex flex-wrap align-items-end justify-content-center">
-                        <!-- Close listing -->
-                        {% if user == auction.lister and auction.active == True %}
-                        <form action="{% url 'close' id=auction.id %}" method="POST">
-                            {% csrf_token %}
-                            <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Close Listing" name="close">
-                        </form>
+<script>
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        // Set up the transaction details
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: '10.00' // The amount to be paid by the user
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        // Capture the funds from the transaction
+        return actions.order.capture().then(function(details) {
+          // Redirect or show a success message
+          alert('Transaction completed by ' + details.payer.name);
+          // Redirect to a success page
+          window.location.href = "{% url 'success_page' %}";
+        });
+      }
+    }).render('#paypal-button-container');
+  </script>
 
-                        <!-- Activate listing -->
-                        {% elif user == auction.lister and auction.active == False %}
-                        <form action="{% url 'activate' id=auction.id %}" method="POST">
-                            {% csrf_token %}
-                            <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Activate Listing" name="open">
-                        </form>
+<!-- Wishlist / Close listing -->
+<div class="py-2 col-lg-6 col-md-12 col-sm-6 col-12 d-flex flex-wrap align-items-end justify-content-start order-lg-2 order-md-1 order-sm-1 order-1">
+    <!-- Close listing -->
+    {% if user == auction.lister and auction.active == True %}
+    <form action="{% url 'close' id=auction.id %}" method="POST">
+        {% csrf_token %}
+        <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Close Listing" name="close">
+    </form>
 
-                        <!-- Add to watchlist / remove from watchlist -->
-                        {% else %}
-                        <form action="{% url 'watchlist' id=auction.id %}" method="POST">
-                            {% csrf_token %}
-                            <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit"
-                            {% if user in auction.watcher.all %}
-                            value="Remove"
-                            {% else %}
-                            value="Watch"
-                            {% endif %}>
-                        </form>
-                        {% endif %}
-                    </div>
+    <!-- Activate listing -->
+    {% elif user == auction.lister and auction.active == False %}
+    <form action="{% url 'activate' id=auction.id %}" method="POST">
+        {% csrf_token %}
+        <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Activate Listing" name="open">
+    </form>
+
+    <!-- Add to watchlist / remove from watchlist -->
+    {% else %}
+    <form action="{% url 'watchlist' id=auction.id %}" method="POST">
+        {% csrf_token %}
+        
+        <input class="btn btn-sm btn-dark border rounded-2 text-uppercase text-decoration-none text-light fw-bold opacity-75" type="submit"
+        {% if user in auction.watcher.all %}
+        value="Remove"
+        {% else %}
+        value="Watch"
+        {% endif %}>
+        
+    </form>
+    {% endif %}
+</div>
+
+
                 </div>
             </div>
 
@@ -124,14 +162,21 @@
 
     <!-- Comment -->
     <div class="mx-5 row">
+                           <!-- PayPal Smart Button Container -->
+<div class="py-3 col-lg-2 offset-lg-5 col-md-12 col-sm-6 col-12 text-end">
+    <div id="paypal-button-container"></div>
+</div>
         <!-- Comment form -->
-        <div class="px-5 py-3 col-md-7 col-lg-5">
+        <div class="px-5 py-1 col-md-7 col-lg-5">
+            
             <form action="{% url 'comment' id=auction.id %}" method="POST" class="my-4">
                 {% csrf_token %}
                 <textarea class="mb-3 rounded-0 border-0 border border-bottom form-control i_desc" rows="3" name="comment" placeholder="Add comment"></textarea>
-                <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Post">
+                <input class="btn btn-sm btn-dark border rounded-2 text-uppercase text-decoration-none text-light fw-bold opacity-75" type="submit" value="Post">
+ 
             </form>
         </div>
+
 
         <!-- Listing's comments -->
         <div class="px-5 py-3 col-md-5 col-lg-7">
@@ -155,7 +200,10 @@
             {% endfor %}
             </div>
         {% endif %}
+        
         </div>
+        
     </div>
+
 </div>
 {% endblock %}

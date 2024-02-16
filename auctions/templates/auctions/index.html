@@ -17,15 +17,15 @@
 {% else %}
     {% for auction in auctions %}
     <a href="{% url 'listing' id=auction.id %}" class="row text-decoration-none">
-        <div class="p-3 mx-3 my-4 border-0 card rounded-0 position-relative" style="width: 15rem;">
+        <div class="p-3 mx-3 my-4 border-0 card rounded-4 position-relative bg-transparent" style="width: 15rem;">
             <!-- Active listing -->
             {%if auction.active == True %}
                 <!-- Active listing with image -->
                 {% if auction.image %}
-                <img src="{{ auction.image }}" class="card-img-top rounded-0 border-bottom" alt="{{ auction.title }}">
+                <img src="{{ auction.image }}" class="card-img-top rounded-4 border-bottom" alt="{{ auction.title }}">
                 <!-- Active listing no image -->
                 {% else %}
-                <img src="https://i.imgur.com/vLDtrNC.jpg" class="card-img-top rounded-0 border-bottom" alt="{{ auction.title }}">
+                <img src="https://i.imgur.com/vLDtrNC.jpg" class="card-img-top rounded-4 border-bottom" alt="{{ auction.title }}">
                 {% endif %}
             <!-- Closed listing -->
             {% else %}

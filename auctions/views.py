@@ -301,3 +301,8 @@ def register(request):
         return render(request, "auctions/register.html", {
             "headline": headline
         })
+
+# PayPal
+def success_page(request):
+    return render(request, "auctions/success_page.html")
+
