@@ -35,4 +35,31 @@
         </div>
     </div>
 </div>
+
+<!-- Content -->
+<div class="mx-5">
+    <form action="{% url 'login' %}" method="post" class="mx-5 my-4 px-2 col-lg-6 col-md-8">
+        {% csrf_token %}
+        <div class="mb-3 form-group">
+            <input type="text" autofocus class="mb-3 rounded-0 border-0 border border-bottom form-control" name="username" placeholder="Username" autocomplete="off">
+        </div>
+        <div class="mb-3 form-group">
+            <input type="password" class="mb-3 rounded-0 border-0 border border-bottom form-control" name="password"
+                placeholder="Password">
+        </div>
+        <div class="my-4 row">
+            <div class="col-4 ">
+                <input class="btn btn-sm btn-dark border rounded-3 text-uppercase text-decoration-none text-light fw-bold opacity-75" type="submit" value="Login">
+            </div>
+            <div class="mt-1 col-8">
+                {% if message %}
+                <div class="text-muted small">{{ message }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+    
+    <p class="mx-5 my-4 mb-0 px-2 fw-light">Don't have an account? <a href="{% url 'register' %}" class="fw-bold nav-link d-inline mx-1">Register!</a></p>
+
+</div>
 {% endblock %}
