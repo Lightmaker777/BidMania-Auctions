@@ -94,7 +94,7 @@
         return actions.order.create({
           purchase_units: [{
             amount: {
-              value: '10.00' // The amount to be paid by the user
+              value: '{{ auction.current_bid }}' // Dynamically set the value to the current bid
             }
           }]
         });
