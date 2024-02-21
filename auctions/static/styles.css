@@ -1,0 +1,50 @@
+body {
+    padding: 0px;
+    /*background-image: linear-gradient(to bottom right, rgb(234, 240, 253), rgb(242, 235, 184));*/
+    background-color: rgb(122, 170, 179);
+}
+
+
+/*:root {
+/*   --maintransition: all 0.3s linear;
+/*}*/
+
+/* Input fields (hover/focus) */
+textarea:hover,
+textarea:active,
+.card:hover,
+.i_list:focus,
+.i_desc:focus,
+input[type="text"]:focus,
+input[type="text"]:hover,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="number"]:hover,
+input[type="url"]:focus,
+input[type="url"]:hover,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="checkbox"]:hover,
+input[type="color"]:focus {
+    border-color: rgba(20, 20, 2, 0.1);    
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    outline: none;
+    /*transition: var(--maintransition);*/
+}
+
+
+a:hover,
+a:active {
+    text-decoration: underline;
+    text-decoration-color: #dee2e6;
+   
+}
+

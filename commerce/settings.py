@@ -10,15 +10,16 @@ SECRET_KEY = '6ps8j!crjgrxt34cqbqn7x&b3y%(fny8k8nh21+qa)%ws3fh!q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['*']
 # TWITCH
-TWITCH_CLIENT_ID = '3nqzs3ob4gw8u5a0g7ra5vnw7g7b7h'
-TWITCH_CLIENT_SECRET = 'rk8mx0aaocloi9ymp4ap80qz27iegj'
-TWITCH_REDIRECT_URI = 'https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app'
-CSRF_TRUSTED_ORIGINS = [
-    "https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app",
-    # Add other trusted origins if needed
-]
+# TWITCH_CLIENT_ID = '3nqzs3ob4gw8u5a0g7ra5vnw7g7b7h'
+# TWITCH_CLIENT_SECRET = 'rk8mx0aaocloi9ymp4ap80qz27iegj'
+# TWITCH_REDIRECT_URI = 'https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app'
+# CSRF_TRUSTED_ORIGINS = [
+#     #"https://web-production-2fbb.up.railway.app",
+#     #"https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app",
+#     # Add other trusted origins if needed
+# ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -71,6 +72,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'bidmania',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
 AUTH_USER_MODEL = 'auctions.User'
 
 # Password validation
@@ -107,3 +119,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'auctions/static'),
+]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

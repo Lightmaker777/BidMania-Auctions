@@ -1,54 +1,51 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<!-- Headline -->
-<div class="mx-5 my-2 container">
-    <div class="mx-5">
-        <h3>{{ headline }}</h3>
-    </div>
-</div>
-
-<!-- Content -->
-<div class="mx-5">
-    <form action="{% url 'create' %}" method="post" class="mx-5 my-4 px-2 col-lg-6 col-md-8">
-        {% csrf_token %}
-        <!-- Title -->
-        <div class="mb-3 form-group">
-            <input type="text" autofocus class="mb-3 rounded-0 border-0 border border-bottom form-control" name="title" placeholder="Title" autocomplete="off">
-        </div>
-        <!-- Description -->
-        <div class="mb-3 form-group">
-            <textarea class=" mb-3 rounded-0 border-0 border border-bottom form-control i_desc" rows="3" name="description" placeholder="Descriptions"></textarea>
-        </div>
-        <!-- Start bid -->
-        <div class="mb-3 input-group">
-            <span class="mb-3 input-group-text rounded-0 border-0 border border-bottom">€</span>
-            <input type="number" step="any" class="mb-3 rounded-0 border-0 border border-bottom form-control" placeholder="Start Bid" autocomplete="off" name="start_bid">
-        </div>
-        <!-- Image URL -->
-        <div class="mb-3 form-group">
-            <input type="url" autofocus class="mb-3 rounded-0 border-0 border border-bottom form-control" name="image" placeholder="Image URL" autocomplete="off">
-        </div>
-        <!-- Category -->
-        <div class="mb-3 form-group">
-            <input type="text" list="category_names"
-                class="mb-3 rounded-0 border-0 border border-bottom form-control i_list" name="category"
-                placeholder="Category">
-            <datalist id="category_names">
-                {% for category in categories %}
-                <option value="{{ category }}">
-                    {% endfor %}
-            </datalist>
-        </div>
-        <!-- Create listing -->
-        <div class="my-4 row">
-            <div class="col-4">
-                <input
-                    class="btn btn-sm btn-dark border rounded-2 text-uppercase text-decoration-none text-light fw-bold opacity-75"
-                    type="submit" value="Create Listing">
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="height: 86vh;">
+        <div class="col-lg-6 col-md-8">
+            <!-- Headline -->
+            <div class="text-center mb-4">
+                <h3>{{ headline }}</h3>
             </div>
-        </div>
 
-    </form>
+            <!-- Content -->
+            <form action="{% url 'create' %}" method="post" class="px-4">
+                {% csrf_token %}
+                <!-- Title -->
+                <div class="mb-3">
+                    <input type="text" autofocus class="form-control" name="title" placeholder="Title" autocomplete="off">
+                </div>
+                <!-- Description -->
+                <div class="mb-3">
+                    <textarea class="form-control" rows="3" name="description" placeholder="Description"></textarea>
+                </div>
+                <!-- Start bid -->
+                <div class="mb-3 input-group">
+                    <span class="input-group-text">€</span>
+                    <input type="number" step="any" class="form-control" placeholder="Start Bid" autocomplete="off" name="start_bid">
+                </div>
+                <!-- Image URL -->
+                <div class="mb-3">
+                    <input type="url" class="form-control" name="image" placeholder="Image URL" autocomplete="off">
+                </div>
+                <!-- Category -->
+                <div class="mb-3">
+                    <input type="text" list="category_names" class="form-control" name="category" placeholder="Category">
+                    <datalist id="category_names">
+                        {% for category in categories %}
+                        <option value="{{ category }}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <!-- Create listing -->
+                <div class="row">
+                    <div class="col-12">
+                        <input class="btn btn-dark btn-block" type="submit" value="Create Listing">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
