@@ -117,7 +117,7 @@
     {% if user == auction.lister and auction.active == True %}
     <form action="{% url 'close' id=auction.id %}" method="POST">
         {% csrf_token %}
-        <input class="btn btn-sm btn-light border rounded-0 text-uppercase text-decoration-none text-secondary fw-bold opacity-75" type="submit" value="Close Listing" name="close">
+        <input class="btn btn-sm btn-dark border rounded-3 text-uppercase text-decoration-none text-slight fw-bold opacity-75" type="submit" value="Close Listing" name="close">
     </form>
 
     <!-- Activate listing -->

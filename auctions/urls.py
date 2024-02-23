@@ -22,7 +22,14 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
-    path("live_auctions",views.live_auctions, name="live_auctions"),
-    path("create_live_auctions", views.create_live_auctions, name="create_live_auctions"),
     path("success", views.success_page, name="success_page"),
+
+    # Twitch authentication
+    path('create_live_auctions/', views.create_live_auctions, name='create_live_auctions'),
+    path("twitch/authenticate", views.twitch_authenticate, name="twitch_authenticate"),
+    path("twitch/callback", views.twitch_callback, name="twitch_callback"),
+    path("live_auctions", views.live_auctions, name="live_auctions"),
+    path("live_stream/<int:auction_id>", views.live_stream, name="live_stream"),
+    path('live_stream_auction/<int:auction_id>/', views.live_stream_auction, name='live_stream_auction'),
+    path('all-live-auctions/', views.all_live_auctions, name='all_live_auctions'),
 ]

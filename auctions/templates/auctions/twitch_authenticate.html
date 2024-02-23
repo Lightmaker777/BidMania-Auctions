@@ -1,0 +1,10 @@
+<!-- twitch_authenticate.html -->
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Twitch Authentication</h1>
+        <p>Click the button below to authenticate with Twitch:</p>
+        <a href="{% url 'twitch_authenticate' %}" class="btn btn-primary">Authenticate with Twitch</a>
+    </div>
+{% endblock %}

@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -18,15 +19,26 @@ class Category(models.Model):
         return self.category
 
 
+class Stream(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    streamer = models.ForeignKey(User, on_delete=models.CASCADE)
+    start_time = models.DateTimeField(auto_now_add=True)
+    twitch_username = models.CharField(max_length=255)
+    twitch_stream_id = models.CharField(max_length=255, null=True, blank=True)
+
+
 class Auction(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     start_bid = models.FloatField()
     image = models.URLField(blank=True)
+    image_upload = forms.ImageField(required=False, label='Upload Image')
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default="")
     lister = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="lister")
     active = models.BooleanField(default=True)
-    
+    stream = models.OneToOneField(Stream, on_delete=models.CASCADE, null=True, blank=True)
+    is_live_auction = models.BooleanField(default=False)
     class Meta:
         ordering = ["title"]
     

@@ -1,25 +1,30 @@
+<!-- live_auctions.html -->
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-</head>
-<body>
-    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
-<div id="twitch-embed"></div>
-<script type="text/javascript">
-    var player = new Twitchyour_twitch_channel_name.Player("twitch-embed", {
-        channel: "BidManiaAuctions",
-        // or video: "your_twitch_video_id"
-    });
-    player.setVolume(0.5);
-</script>
-</body>
-</html>
-
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1>Live Auctions</h1>
+                {% if live_auctions %}
+                    <ul class="list-group">
+                        {% for auction in live_auctions %}
+                            <li class="list-group-item"><a href="{% url 'live_stream_auction' auction_id=auction.id %}">{{ auction.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No live auctions available.</p>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <!-- Add any additional content or sidebar here -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Additional Information</h5>
+                        <!-- Add more content here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
-

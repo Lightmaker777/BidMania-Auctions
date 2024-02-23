@@ -12,14 +12,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 # TWITCH
-# TWITCH_CLIENT_ID = ''
-# TWITCH_CLIENT_SECRET = ''
-# TWITCH_REDIRECT_URI = ''
-# CSRF_TRUSTED_ORIGINS = [
-#     "https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app",
-#     "https://web-production-2fbb.up.railway.app",
+TWITCH_CLIENT_ID = 'omkkjrio5x07tu3dacmqfx2aw9ha51'
+TWITCH_CLIENT_SECRET = 'rk8mx0aaocloi9ymp4ap80qz27iegj'
+TWITCH_REDIRECT_URI = 'https://46a5-2a01-5241-c4e-5d00-00-1e6c.ngrok-free.app'
+CSRF_TRUSTED_ORIGINS = [
+     "https://46a5-2a01-5241-c4e-5d00-00-1e6c.ngrok-free.app",
+#     "https://46a5-2a01-5241-c4e-5d00-00-1e6c.ngrok-free.app",
+#     #"https://web-production-2fbb.up.railway.app",
 #     # Add other trusted origins if needed
-# ]
+]
 # Application definition
 
 INSTALLED_APPS = [
