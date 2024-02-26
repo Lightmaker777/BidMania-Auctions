@@ -12,14 +12,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 # TWITCH
-# TWITCH_CLIENT_ID = ''
-# TWITCH_CLIENT_SECRET = ''
-# TWITCH_REDIRECT_URI = ''
-# CSRF_TRUSTED_ORIGINS = [
+TWITCH_CLIENT_ID = 'kvae57wbwpf3xbu4ckuon2xxrop2to'
+TWITCH_CLIENT_SECRET = 'qjm9nfmgug09wwxtntljys9aqw1kzo'
+TWITCH_REDIRECT_URI = 'https://c1e3-2a01-5241-c4e-5d00-00-b6ae.ngrok-free.app'
+CSRF_TRUSTED_ORIGINS = [
+     "https://c1e3-2a01-5241-c4e-5d00-00-b6ae.ngrok-free.app",
+#     "https://46a5-2a01-5241-c4e-5d00-00-1e6c.ngrok-free.app",
 #     #"https://web-production-2fbb.up.railway.app",
-#    
-#     
-# ]
+#     # Add other trusted origins if needed
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -83,6 +84,7 @@ DATABASES = {
 #     }
 # }
 
+
 AUTH_USER_MODEL = 'auctions.User'
 
 # Password validation
@@ -115,6 +117,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Static files (CSS, JavaScript, Images)
 

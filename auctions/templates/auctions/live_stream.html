@@ -1,0 +1,31 @@
+<!-- live_stream.html -->
+{% extends "auctions/layout.html" %}
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1>{{ auction.title }} Live Stream</h1>
+                <p>{{ auction.description }}</p>
+                <!-- Embed your Twitch stream here using the Twitch Embed API -->
+                <div id="twitch-embed"></div>
+                <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+                <script type="text/javascript">
+                    var player = new Twitch.Player("twitch-embed", {
+                        channel: "{{ auction.stream.twitch_username }}",
+                        // You can customize additional options here
+                    });
+                    player.setVolume(0.5);
+                </script>
+            </div>
+            <div class="col-lg-4">
+                <!-- Add any additional content or sidebar here -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Additional Information</h5>
+                        <!-- Add more content here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -52,6 +52,13 @@
                         <li class="nav-item">
                             <a class="me-2 nav-link" href="{% url 'create_live_auctions' %}">Create Live-Auctions</a>
                         </li>
+                        <!-- All Live Auctions -->
+                        <li class="nav-item">
+                            {% url 'all_live_auctions' as all_live_auctions_url %}
+                            <a class="nav-link {% if request.path == all_live_auctions_url %}active{% endif %}" href="{{ all_live_auctions_url }}">
+                                <i class="bi bi-camera-video-fill text-danger"></i> All Live Auctions
+                            </a>
+                        </li>
                     </ul>
 
                     <!-- Account -->
@@ -103,5 +110,7 @@
         {% block body %}
         {% endblock %}
         </div>
+        
+
     </body>
 </html>

@@ -1,0 +1,34 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>All Live Auctions</h1>
+        {% if live_auctions %}
+            <div class="row">
+                <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+                {% for auction in live_auctions %}
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ auction.title }}</h5>
+                                <p class="card-text">{{ auction.description }}</p>
+                                <div id="twitch-embed-{{ auction.id }}"></div>
+                                <script type="text/javascript">
+                                    var player = new Twitch.Player("twitch-embed-{{ auction.id }}", {
+                                        width: "100%",
+                                        height: 180,
+                                        channel: "{{ auction.stream.twitch_username }}",
+                                    });
+                                    player.setVolume(0.5);
+                                </script>
+                                <a href="{% url 'live_stream' auction_id=auction.id %}" class="btn btn-primary mt-2">Watch</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No live auctions available.</p>
+        {% endif %}
+    </div>
+{% endblock %}

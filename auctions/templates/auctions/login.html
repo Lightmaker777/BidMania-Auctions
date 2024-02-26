@@ -14,7 +14,12 @@
                     <input type="text" autofocus class="form-control" name="username" placeholder="Username" autocomplete="off">
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" name="password" placeholder="Password">
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="password" id="passwordInput" placeholder="Password">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword" onclick="togglePasswordVisibility()">
+                            <i class="bi bi-eye-slash"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6">
@@ -35,4 +40,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Function to toggle password visibility
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById("passwordInput");
+        var togglePasswordButton = document.getElementById("togglePassword");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            togglePasswordButton.innerHTML = '<i class="bi bi-eye"></i>';
+        } else {
+            passwordInput.type = "password";
+            togglePasswordButton.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        }
+    }
+</script>
+
 {% endblock %}

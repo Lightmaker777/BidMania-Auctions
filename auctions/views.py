@@ -1,32 +1,32 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from .models import User, Auction, Category, Bid, Comment, Stream
+from .forms import CreateLiveAuctionForm 
+from django.conf import settings
+from twitch import TwitchClient
+from django.db.models import Q
+import requests
+from django.contrib import messages
 
-from .models import User, Auction, Category, Bid, Comment
 
 
+# Twitch authentication and callback
 from twitch import TwitchClient
 
 def twitch_authenticate(request):
-    client = TwitchClient(client_id=settings.TWITCH_CLIENT_ID, client_secret=settings.TWITCH_CLIENT_SECRET)
-
-    # Redirect the user to Twitch for authentication
-    return redirect(client.authorize_url(redirect_uri='https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app', scopes=['user_read']))
+    twitch_redirect_uri = request.build_absolute_uri(reverse('twitch_callback'))
+    twitch_auth_url = f'https://id.twitch.tv/oauth2/authorize?client_id={settings.TWITCH_CLIENT_ID}&redirect_uri={twitch_redirect_uri}&response_type=code&scope=user_read'
+    return redirect(twitch_auth_url)
 
 def twitch_callback(request):
     client = TwitchClient(client_id=settings.TWITCH_CLIENT_ID, client_secret=settings.TWITCH_CLIENT_SECRET)
-
-    # Exchange the code for an access token
     code = request.GET.get('code', None)
-    token, refresh_token = client.exchange_code(code, 'https://f089-2a01-5241-c4e-5d00-00-bdf2.ngrok-free.app')
-    
-    # Store the token in your database or session for future use
-
-    return render(request, 'success_page.html')
-
+    token, refresh_token = client.exchange_code(code, settings.TWITCH_REDIRECT_URI)
+    return render(request, 'twitch_callback.html', {'twitch_access_token': token.access_token})
 
 
 # Active listings
@@ -44,38 +44,123 @@ def all(request):
         "headline": "All Listings"
     })
 
-# All active live auction listings
+@login_required(login_url='login')
 def live_auctions(request):
+    live_auctions = Auction.objects.filter(stream__isnull=False, active=True)
     return render(request, "auctions/live_auctions.html", {
-        "auctions": Auction.objects.all(),
-        "headline": "All Live Auction Shows"
+        "live_auctions": live_auctions,
+        "headline": "Live Auctions"
     })
 
-# Create live auction shows
+
+# View for listing all live auctions from all users
+@login_required(login_url='login')
+def all_live_auctions(request):
+    live_auctions = Auction.objects.filter(
+        Q(stream__isnull=False) & Q(active=True)
+    )
+    return render(request, "auctions/all_live_auctions.html", {
+        "live_auctions": live_auctions,
+        "headline": "All Live Auctions"
+    })
+
+@login_required(login_url='login')
+def live_stream(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id, active=True)
+    # You can pass the auction details to the template for rendering Twitch stream
+    return render(request, 'auctions/live_stream.html', {'auction': auction})
+
+def live_stream_auction(request, auction_id):
+    auction = get_object_or_404(Auction, pk=auction_id, active=True)
+    # Your logic for rendering the live stream page goes here
+    return render(request, 'auctions/live_stream_auction.html', {'auction': auction})
+
 @login_required(login_url='login')
 def create_live_auctions(request):
-    if request.method == "GET":
-        return render(request, "auctions/create_live_auctions.html", {
-            "categories": Category.objects.all(),
-            "headline": "Create Live Events",
-        })
+    if request.method == "POST":
+        form = CreateLiveAuctionForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Extract form data using cleaned_data
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+            start_bid = form.cleaned_data['start_bid']
+            category = form.cleaned_data['category']
+
+            # Create a new auction
+            new_auction = Auction(
+                title=title,
+                description=description,
+                start_bid=start_bid,
+                category=category,
+                lister=request.user,
+                is_live_auction=True
+            )
+
+            # Check if an image file is uploaded
+            if form.cleaned_data['image_upload']:
+                new_auction.image_upload = form.cleaned_data['image_upload']
+            elif form.cleaned_data['image_url']:
+                new_auction.image = form.cleaned_data['image_url']
+            else:
+                # If no image is uploaded, you might want to handle this case or provide a default image
+                pass
+
+            new_auction.save()            
+
+            # Create a new stream associated with the auction
+            twitch_username = form.cleaned_data['twitch_username']
+            stream = Stream(
+                title=title,
+                description=description,
+                streamer=request.user,
+                twitch_username=twitch_username,
+                twitch_stream_id=get_twitch_stream_id(twitch_username)
+            )
+            stream.save()
+
+            # Link the stream to the auction
+            new_auction.stream = stream
+            new_auction.save()
+
+            return redirect("live_auctions")  # Redirect to the auction listing or any other page
     else:
-        title = request.POST['title']
-        description = request.POST['description']
-        start_bid = request.POST['start_bid']
-        live_auction = request.POST['live-auction']
-        category = Category.objects.get(category=request.POST['category'])
-        new_listing = Auction(
-            title=title,
-            description=description,
-            start_bid=start_bid,
-            live_auction=live_auction,
-            category=category,
-            lister=request.user)
-        new_listing.save()
-        return redirect("index")
+        form = CreateLiveAuctionForm()
 
+    return render(request, "auctions/create_live_auctions.html", {
+        "form": form,
+        "categories": Category.objects.all(),
+        "headline": "Create Live Auctions",
+        "user_id": request.user.id
+    })
 
+# Function to get Twitch stream ID
+def get_twitch_stream_id(username):
+    # Replace 'YOUR_TWITCH_CLIENT_ID' with your actual Twitch client ID
+    twitch_client_id = 'TWITCH_CLIENT_ID'
+    
+    # Twitch API endpoint for getting user information
+    api_url = f'https://api.twitch.tv/helix/users?login={username}'
+    
+    # Set up headers with Twitch client ID
+    headers = {
+        'Client-ID': twitch_client_id,
+    }
+
+    try:
+        # Make a GET request to the Twitch API
+        response = requests.get(api_url, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        
+        # Parse the JSON response
+        user_data = response.json()
+        
+        # Extract and return the user's ID
+        user_id = user_data['data'][0]['id']
+        return user_id
+    except requests.exceptions.RequestException as e:
+        # Handle request errors
+        print(f"Error accessing Twitch API: {e}")
+        return None
 
 
 # Closed listings
@@ -148,14 +233,24 @@ def create(request):
         description = request.POST['description']
         start_bid = request.POST['start_bid']
         image = request.POST['image']
+        image_upload = request.POST['image_upload']
         category = Category.objects.get(category=request.POST['category'])
         new_listing = Auction(
             title=title,
             description=description,
             start_bid=start_bid,
             image=image,
+            image_upload=image_upload,
             category=category,
             lister=request.user)
+        
+   # Check if an image URL is provided
+        if 'image' in request.POST and request.POST['image']:
+            new_listing.image = request.POST['image']
+        # Check if an image file is uploaded
+        elif 'image_upload' in request.FILES:
+            new_listing.image = request.FILES['image_upload']  
+
         new_listing.save()
         return redirect("index")
 
