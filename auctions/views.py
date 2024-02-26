@@ -80,11 +80,12 @@ def create_live_auctions(request):
     if request.method == "POST":
         form = CreateLiveAuctionForm(request.POST, request.FILES)
         if form.is_valid():
+            # Extract form data using cleaned_data
             title = form.cleaned_data['title']
             description = form.cleaned_data['description']
             start_bid = form.cleaned_data['start_bid']
-            category = Category.objects.get(category=form.cleaned_data['category'])
-            
+            category = form.cleaned_data['category']
+
             # Create a new auction
             new_auction = Auction(
                 title=title,
@@ -92,16 +93,19 @@ def create_live_auctions(request):
                 start_bid=start_bid,
                 category=category,
                 lister=request.user,
-                is_live_auction=True  # Set is_live_auction to True for live stream auctions
+                is_live_auction=True
             )
 
-            # Check if an image URL is provided
-            if form.cleaned_data['image_url']:
+            # Check if an image file is uploaded
+            if form.cleaned_data['image_upload']:
+                new_auction.image_upload = form.cleaned_data['image_upload']
+            elif form.cleaned_data['image_url']:
                 new_auction.image = form.cleaned_data['image_url']
-            elif form.cleaned_data['image_upload']:
-                new_auction.image = form.cleaned_data['image_upload']
+            else:
+                # If no image is uploaded, you might want to handle this case or provide a default image
+                pass
 
-            new_auction.save()
+            new_auction.save()            
 
             # Create a new stream associated with the auction
             twitch_username = form.cleaned_data['twitch_username']
@@ -110,7 +114,7 @@ def create_live_auctions(request):
                 description=description,
                 streamer=request.user,
                 twitch_username=twitch_username,
-                twitch_stream_id=get_twitch_stream_id(twitch_username)  # Implement this function
+                twitch_stream_id=get_twitch_stream_id(twitch_username)
             )
             stream.save()
 
@@ -126,7 +130,7 @@ def create_live_auctions(request):
         "form": form,
         "categories": Category.objects.all(),
         "headline": "Create Live Auctions",
-        "user_id": request.user.id  # Pass the user's ID to the template
+        "user_id": request.user.id
     })
 
 # Function to get Twitch stream ID
