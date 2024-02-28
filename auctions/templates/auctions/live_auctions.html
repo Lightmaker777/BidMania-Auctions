@@ -9,7 +9,7 @@
                 {% if live_auctions %}
                     <ul class="list-group">
                         {% for auction in live_auctions %}
-                            <li class="list-group-item"><a href="{% url 'live_stream_auction' auction_id=auction.id %}">{{ auction.title }}</a></li>
+                            <li class="list-group-item"><a href="{% url 'live_stream' auction_id=auction.id %}">{{ auction.title }}</a></li>
                         {% endfor %}
                     </ul>
                 {% else %}
