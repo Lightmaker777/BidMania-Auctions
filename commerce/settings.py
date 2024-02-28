@@ -12,18 +12,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 # TWITCH
-TWITCH_CLIENT_ID = 'kvae57wbwpf3xbu4ckuon2xxrop2to'
-TWITCH_CLIENT_SECRET = 'qjm9nfmgug09wwxtntljys9aqw1kzo'
-TWITCH_REDIRECT_URI = 'https://c1e3-2a01-5241-c4e-5d00-00-b6ae.ngrok-free.app'
+TWITCH_CLIENT_ID = 'pusb6icnk0eq3j54lfc5v1pd2dk63p'
+TWITCH_CLIENT_SECRET = 'm49lmrbxoceyiizaf6gxyftibhp9sa'
+TWITCH_REDIRECT_URI = 'https://127.0.0.1:8000'
 CSRF_TRUSTED_ORIGINS = [
-     "https://c1e3-2a01-5241-c4e-5d00-00-b6ae.ngrok-free.app",
-#     "https://46a5-2a01-5241-c4e-5d00-00-1e6c.ngrok-free.app",
-#     #"https://web-production-2fbb.up.railway.app",
-#     # Add other trusted origins if needed
+     "https://127.0.0.1:8000",   
+     #"https://web-production-2fbb.up.railway.app",
+   
 ]
 # Application definition
 
 INSTALLED_APPS = [
+    'sslserver',
     'auctions',
     'django.contrib.admin',
     'django.contrib.auth',

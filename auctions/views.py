@@ -102,7 +102,7 @@ def create_live_auctions(request):
             elif form.cleaned_data['image_url']:
                 new_auction.image = form.cleaned_data['image_url']
             else:
-                # If no image is uploaded, you might want to handle this case or provide a default image
+                # If no image is uploaded, handle this case or provide a default image
                 pass
 
             new_auction.save()            
