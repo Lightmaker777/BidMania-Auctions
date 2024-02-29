@@ -1,72 +1,131 @@
-{% extends './layout.html' %}
+{% extends "auctions/layout.html" %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="auction-form">
-            <h1>Create Live Auctions</h1>
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="height: 86vh;">
+        <div class="col-lg-6 col-md-8">
+            <!-- Headline -->
+            <div class="text-center mb-4">
+                <h3>Create Live Auctions</h3>
+            </div>
 
+            <!-- Messages -->
             {% for message in messages %}
                 <div class="alert alert-info mt-3">{{ message }}</div>
             {% endfor %}
 
-            <div class="mt-4">
-                <a href="{% url 'twitch_authenticate' %}" class="btn btn-primary">Authenticate with Twitch</a>
+            <!-- Twitch Authentication -->
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label text-end"></label>
+                <div class="col-sm-9">
+                    <a href="{% url 'twitch_authenticate' %}" class="btn btn-primary">Authenticate with Twitch</a>
+                </div>
             </div>
 
+            <!-- Auction Form -->
             <form method="post" action="{% url 'create_live_auctions' %}" class="mt-4" enctype="multipart/form-data">
                 {% csrf_token %}
 
+                <!-- Auction Details -->
                 <div class="auction-details">
-                    <div class="mb-3">
-                        {{ form.title.label_tag }} {{ form.title }}
+                    <div class="mb-3 row">
+                        <label for="title" class="col-sm-3 col-form-label text-end"></label>
+                        <div class="col-sm-9">
+                            <input type="text" name="title" id="title" class="form-control" required placeholder="Title">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        {{ form.description.label_tag }} {{ form.description }}
+                    <div class="mb-3 row">
+                        <label for="description" class="col-sm-3 col-form-label text-end"></label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="3" name="description" placeholder="Description"></textarea>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        {{ form.start_bid.label_tag }} {{ form.start_bid }}
+                    <div class="mb-3 row">
+                        <label for="start_bid" class="col-sm-3 col-form-label text-end"></label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <span class="input-group-text">€</span>
+                                <input type="number" step="any" class="form-control" placeholder="Start Bid" autocomplete="off" name="start_bid" id="start_bid">
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        {{ form.category.label_tag }} {{ form.category }}
+                    
+                    <div class="mb-3 row">
+                        <label for="category" class="col-sm-3 col-form-label text-end"></label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" list="category_names" class="form-control" name="category" placeholder="Choose Category">
+                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    {% for category in categories %}
+                                    <li><a class="dropdown-item" href="#">{{ category }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <datalist id="category_names">
+                                {% for category in categories %}
+                                <option value="{{ category }}">
+                                {% endfor %}
+                            </datalist>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        {{ form.image_url.label_tag }} {{ form.image_url }}
+                    
+                    <div class="mb-3 row">
+                        <label for="image_url" class="col-sm-3 col-form-label text-end"></label>
+                        <div class="col-sm-9">
+                            <input type="text" name="image_url" id="image_url" class="form-control" required placeholder="Image URL">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        {{ form.image_upload.label_tag }} {{ form.image_upload }}
+                    <div class="mb-3 row">
+                        <label for="image_upload" class="col-sm-3 col-form-label text-end"></label>
+                        <div class="col-sm-9">
+                            <input type="file" name="image_upload" id="image_upload" class="form-control" required>
+                        </div>
                     </div>
                 </div>
 
-                <div class="twitch-embedding mt-3">
-                    <label for="twitch_username" class="form-label">Twitch Username:</label>
-                    <input type="text" name="twitch_username" id="twitch_username" class="form-control" required placeholder="Enter Twitch Username">
+                <!-- Twitch Username -->
+                <div class="form-group row mt-3">
+                    <label for="twitch_username" class="col-sm-3 col-form-label text-end"></label>
+                    <div class="col-sm-9">
+                        <input type="text" name="twitch_username" id="twitch_username" class="form-control" required placeholder="Twitch Username">
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-success mt-3">Create Auction</button>
+                <!-- Create Auction Button -->
+                <div class="mb-3 row">
+                    <label class="col-sm-3 col-form-label text-end"></label>
+                    <div class="col-sm-9">
+                        <button type="submit" class="btn btn-success mt-3">Create Auction</button>
+                    </div>
+                </div>
             </form>
-        </div>
 
-        <!-- Load Twitch embedding script dynamically -->
-        {% if form.twitch_username.value %}
-            <div id="twitch-embed" class="mt-4"></div>
-            <script src="https://player.twitch.tv/js/embed/v1.js"></script>
-            <script type="text/javascript">
-                document.addEventListener("DOMContentLoaded", function () {
-                    var twitchClientId = "TWITCH_CLIENT_ID";
-                    var twitchUsernameInput = document.getElementById("twitch_username");
+            <!-- Load Twitch Embedding Script -->
+            {% if form.twitch_username.value %}
+                <div id="twitch-embed" class="mt-4"></div>
+                <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+                <script type="text/javascript">
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var twitchClientId = "TWITCH_CLIENT_ID";
+                        var twitchUsernameInput = document.getElementById("twitch_username");
 
-                    twitchUsernameInput.addEventListener("change", function () {
-                        var twitchUsername = twitchUsernameInput.value;
+                        twitchUsernameInput.addEventListener("change", function () {
+                            var twitchUsername = twitchUsernameInput.value;
 
-                        var player = new Twitch.Player("twitch-embed", {
-                            width: "50%",
-                            height: 480,
-                            channel: twitchUsername,
+                            var player = new Twitch.Player("twitch-embed", {
+                                width: "50%",
+                                height: 480,
+                                channel: twitchUsername,
+                            });
+                            player.setVolume(0.5);
                         });
-                        player.setVolume(0.5);
                     });
-                });
-            </script>
-        {% endif %}
+                </script>
+            {% endif %}
+        </div>
     </div>
+</div>
 {% endblock %}
