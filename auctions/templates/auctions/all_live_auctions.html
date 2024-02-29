@@ -11,7 +11,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">{{ auction.title }}</h5>
-                                <p class="card-text">{{ auction.description }}</p>
+                                <p class="card-text text-truncate">{{ auction.description }}</p>
                                 <div id="twitch-embed-{{ auction.id }}"></div>
                                 <script type="text/javascript">
                                     var player = new Twitch.Player("twitch-embed-{{ auction.id }}", {
