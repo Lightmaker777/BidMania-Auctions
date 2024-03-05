@@ -52,7 +52,8 @@
 
             <!-- Title -->
             <div class="py-3 d-flex flex-wrap align-items-center border-0 border-bottom">
-                <h2>{{ auction.title }}</h2>
+                <h2><li class="list-group-item"><a href="{% url 'live_stream' auction_id=auction.id %}">{{ auction.title }}</a></li>
+                </h2>
             </div>
 
             <!-- Description -->
@@ -78,7 +79,7 @@
         
         <div class="input-group">
             <span class="mb-3 border input-group-text rounded-0 border-0 border border-bottom">€</span>
-            <input type="number" class="mb-3 rounded-0 border-0 border border-bottom form-control" name="bid" placeholder="Your bid" autocomplete="off">
+            <input type="number" class="mb-3 rounded-0 border-0 border border-bottom form-control" name="bid" placeholder="Your bid" autocomplete="off" required>
         </div>
         
         <input class="btn btn-sm btn-dark border rounded-2 text-uppercase text-decoration-none text-light fw-bold opacity-75" type="submit" value="Bid Now">
