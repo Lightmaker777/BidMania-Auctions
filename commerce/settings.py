@@ -1,24 +1,28 @@
 import os
+from decouple import config, Csv
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID', default='', cast=str)
+
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6ps8j!crjgrxt34cqbqn7x&b3y%(fny8k8nh21+qa)%ws3fh!q'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 # TWITCH
-TWITCH_CLIENT_ID = 'pusb6icnk0eq3j54lfc5v1pd2dk63p'
-TWITCH_CLIENT_SECRET = 'm49lmrbxoceyiizaf6gxyftibhp9sa'
+TWITCH_CLIENT_ID = config('TWITCH_CLIENT_ID')
+TWITCH_CLIENT_SECRET = config('TWITCH_CLIENT_SECRET')
 TWITCH_REDIRECT_URI = 'https://127.0.0.1:8000'
 CSRF_TRUSTED_ORIGINS = [
      "https://127.0.0.1:8000",   
-     #"https://web-production-2fbb.up.railway.app",
-   
+       
 ]
 # Application definition
 
@@ -72,17 +76,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'bidmania',
-#         'USER': 'postgres',
-#         'PASSWORD': 'postgres',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 
 AUTH_USER_MODEL = 'auctions.User'
