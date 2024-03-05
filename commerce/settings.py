@@ -15,7 +15,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['https://bidmania.up.railway.ap']
+ALLOWED_HOSTS = ['*']
 # TWITCH
 TWITCH_CLIENT_ID = config('TWITCH_CLIENT_ID')
 TWITCH_CLIENT_SECRET = config('TWITCH_CLIENT_SECRET')
