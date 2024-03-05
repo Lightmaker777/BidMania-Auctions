@@ -11,8 +11,8 @@ from twitch import TwitchClient
 from django.db.models import Q
 import requests
 from django.contrib import messages
-
-
+from datetime import timedelta
+from django.utils import timezone
 
 # Twitch authentication and callback
 from twitch import TwitchClient
@@ -218,7 +218,6 @@ def watchlist(request, id):
         })
 
 
-# Create new listing
 @login_required(login_url='login')
 def create(request):
     # User clicks "create listing" on navbar
@@ -235,6 +234,10 @@ def create(request):
         image = request.POST['image']
         image_upload = request.POST['image_upload']
         category = Category.objects.get(category=request.POST['category'])
+
+        # Calculate the end date for the new auction (e.g., set it to 7 days from now)
+        end_date = timezone.now() + timedelta(days=7)
+
         new_listing = Auction(
             title=title,
             description=description,
@@ -242,17 +245,29 @@ def create(request):
             image=image,
             image_upload=image_upload,
             category=category,
-            lister=request.user)
-        
-   # Check if an image URL is provided
+            lister=request.user,
+            end_date=end_date  # Set the end date for the auction
+        )
+
+        # Check if an image URL is provided
         if 'image' in request.POST and request.POST['image']:
             new_listing.image = request.POST['image']
         # Check if an image file is uploaded
         elif 'image_upload' in request.FILES:
-            new_listing.image = request.FILES['image_upload']  
+            new_listing.image = request.FILES['image_upload']
 
         new_listing.save()
-        return redirect("index")
+
+        # Calculate remaining time until the auction ends
+        remaining_time = new_listing.time_until_end()
+
+        context = {
+            'auction': new_listing,
+            'remaining_time': remaining_time,
+        }
+
+        return render(request, 'auctions/listing.html', context)
+
 
 
 
@@ -400,4 +415,3 @@ def register(request):
 # PayPal
 def success_page(request):
     return render(request, "auctions/success_page.html")
-
