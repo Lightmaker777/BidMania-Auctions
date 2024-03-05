@@ -1,7 +1,17 @@
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from .views import AuctionViewSet, UserViewSet, CommentViewSet, BidViewSet
+from rest_framework.routers import DefaultRouter
+
+
+router = DefaultRouter()
+router.register(r'auctions', AuctionViewSet, basename='auction')
+router.register(r'users', UserViewSet, basename='user')
+router.register(r'comments', CommentViewSet, basename='comment')
+router.register(r'bids', BidViewSet, basename='bid')
+
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -24,6 +34,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("success", views.success_page, name="success_page"),
+    path('api/', include(router.urls)),
 
     # Twitch authentication
     path('create_live_auctions/', views.create_live_auctions, name='create_live_auctions'),

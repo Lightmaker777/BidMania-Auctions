@@ -13,6 +13,24 @@ import requests
 from django.contrib import messages
 from datetime import timedelta
 from django.utils import timezone
+from rest_framework import viewsets
+from .serializers import AuctionSerializer, UserSerializer, CommentSerializer, BidSerializer
+
+class AuctionViewSet(viewsets.ModelViewSet):
+    queryset = Auction.objects.all()
+    serializer_class = AuctionSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+class BidViewSet(viewsets.ModelViewSet):
+    queryset = Bid.objects.all()
+    serializer_class = BidSerializer
 
 # Twitch authentication and callback
 from twitch import TwitchClient
