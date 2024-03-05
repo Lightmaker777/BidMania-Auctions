@@ -19,9 +19,9 @@ ALLOWED_HOSTS = ['*']
 # TWITCH
 TWITCH_CLIENT_ID = config('TWITCH_CLIENT_ID')
 TWITCH_CLIENT_SECRET = config('TWITCH_CLIENT_SECRET')
-TWITCH_REDIRECT_URI = 'https://127.0.0.1:8000'
+TWITCH_REDIRECT_URI = 'https://bidmania.up.railway.app'
 CSRF_TRUSTED_ORIGINS = [
-     "https://127.0.0.1:8000",   
+     "https://bidmania.up.railway.app",   
        
 ]
 # Application definition
