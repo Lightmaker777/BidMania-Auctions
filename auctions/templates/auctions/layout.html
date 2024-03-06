@@ -56,8 +56,8 @@
                         </li>
                         <!-- All Live Auctions -->
                         <li class="nav-item">
-                            {% url 'all_live_auctions' as all_live_auctions_url %}
-                            <a class="nav-link {% if request.path == all_live_auctions_url %}active{% endif %}" href="{{ all_live_auctions_url }}">
+                            {% url 'live_auctions' as live_auctions_url %}
+                            <a class="nav-link {% if request.path == live_auctions_url %}active{% endif %}" href="{{ live_auctions_url }}">
                                 <i class="bi bi-camera-video-fill text-danger"></i> All Live Auctions
                             </a>
                         </li>
