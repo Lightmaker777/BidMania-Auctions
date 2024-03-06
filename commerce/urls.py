@@ -26,7 +26,7 @@ schema_view = get_schema_view(
         description="This API provides endpoints for managing and accessing various resources, including user data, auctions, comments, and more.",
         terms_of_service="https://www.bidmania.com/terms/",
         contact=openapi.Contact(email="contact@bidmania.com"),
-        license=openapi.License(name="BiaMania License"),
+        license=openapi.License(name="BidMania License"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
