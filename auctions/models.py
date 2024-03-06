@@ -39,7 +39,7 @@ class Auction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=None)
     lister = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="lister")
     active = models.BooleanField(default=True)
-    stream = models.OneToOneField(Stream, on_delete=models.CASCADE, null=True, blank=True)
+    stream = models.OneToOneField(Stream, on_delete=models.CASCADE, null=True, blank=True, related_name="stream")
     is_live_auction = models.BooleanField(default=False)    
     end_date = models.DateTimeField(default=timezone.now)
 

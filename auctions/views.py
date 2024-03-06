@@ -372,6 +372,7 @@ def my_bids(request):
         "headline": "My Bids"
     })
 
+
 def login_view(request):
     headline = "Login"
     if request.method == "POST":

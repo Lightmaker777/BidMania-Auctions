@@ -29,6 +29,7 @@ urlpatterns = [
     path("close/<int:id>", views.close, name="close"),
     path("activate/<int:id>", views.activate, name="activate"),
     path("mylistings", views.my_listings, name="my_listings"),
+    
     path("mybids", views.my_bids, name="my_bids"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),

@@ -5,20 +5,22 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-lg-8">
-                <h1>Live Auctions</h1>
+                <h1>{{ headline }}</h1>
                 {% if live_auctions %}
                     <ul class="list-group">
                         {% for auction in live_auctions %}
-                            <li class="list-group-item"><a href="{% url 'live_stream' auction_id=auction.id %}">{{ auction.title }}</a></li>
-                            
-                            
+                            <li class="list-group-item">
+                                <h3><a href="{% url 'live_stream' auction_id=auction.id %}">{{ auction.title }}</a></h3>
+                                <p>{{ auction.description }}</p>
+                                <p>Ends in: {{ auction.time_until_end }}</p>
+                                <!-- Add more details as needed -->
+                            </li>
                         {% endfor %}
                     </ul>
                 {% else %}
                     <p>No live auctions available.</p>
                 {% endif %}
             </div>
-            
         </div>
     </div>
 {% endblock %}

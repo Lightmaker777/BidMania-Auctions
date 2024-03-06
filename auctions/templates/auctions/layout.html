@@ -56,8 +56,8 @@
                         </li>
                         <!-- All Live Auctions -->
                         <li class="nav-item">
-                            {% url 'live_auctions' as live_auctions_url %}
-                            <a class="nav-link {% if request.path == live_auctions_url %}active{% endif %}" href="{{ live_auctions_url }}">
+                            {% url 'all_live_auctions' as all_live_auctions_url %}
+                            <a class="nav-link {% if request.path == all_live_auctions_url %}active{% endif %}" href="{{ all_live_auctions_url }}">
                                 <i class="bi bi-camera-video-fill text-danger"></i> All Live Auctions
                             </a>
                         </li>
@@ -70,11 +70,7 @@
                             <i class="me-1 bi bi-person-fill"></i>{{ user.username }}
                         </div>
                         <ul class="dropdown-menu">
-                            <li class="nav-item">
-                                <a class="text-decoration-none dropdown-item" href="{% url 'live_auctions' %}">
-                                    My Live-Auctions
-                                </a>
-                            </li>
+                            
                             <li class="nav-item">
                                 <a class="text-decoration-none dropdown-item" href="{% url 'my_listings' %}">
                                     My Listings
