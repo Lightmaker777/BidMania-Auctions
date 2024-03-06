@@ -46,7 +46,7 @@
 
 
 
-![Image](media/auction_images/create.png)
+![Image](media/auction_images/create_form.png)
 
 
 
@@ -85,6 +85,6 @@
     python3 manage.py runserver
 
 ```
-
+![Image](media/auction_images/requirements.png)
 
 
