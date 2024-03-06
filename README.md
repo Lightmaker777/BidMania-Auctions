@@ -1,4 +1,4 @@
-# REAL-TIME AUCTIONS KUKU
+# REAL-TIME AUCTIONS 
 
 ## BidMania: Live Real-Time Auction Experience
 ### Concept Overview:
