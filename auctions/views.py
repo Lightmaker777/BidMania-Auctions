@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import User, Auction, Category, Bid, Comment, Stream
-from .forms import CreateLiveAuctionForm 
+from .forms import CreateLiveAuctionForm ,ContactForm
 from django.conf import settings
 from twitch import TwitchClient
 from django.db.models import Q
@@ -15,6 +15,10 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import viewsets
 from .serializers import AuctionSerializer, UserSerializer, CommentSerializer, BidSerializer
+# new stuff
+from django.core.mail import send_mail
+from django.views.generic import TemplateView, FormView
+from django.views.generic.base import TemplateView
 
 class AuctionViewSet(viewsets.ModelViewSet):
     queryset = Auction.objects.all()
@@ -434,3 +438,36 @@ def register(request):
 # PayPal
 def success_page(request):
     return render(request, "auctions/success_page.html")
+
+
+# contact us
+def contact_us(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get("email")
+            subject = form.cleaned_data.get("subject")
+            message = form.cleaned_data.get("message")
+
+            full_message = f"""
+                Received message below from {email}, {subject}
+                ________________________
+
+
+                {message}
+                """
+            send_mail(
+                subject="Received contact form submission",
+                message=full_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.NOTIFY_EMAIL],
+            )
+            return render(request, 'success.html')  # Render success page after form submission
+    else:
+        form = ContactForm()
+
+    return render(request, 'auctions/contact_us.html', {'form': form})
+
+
+class SuccessView(TemplateView):
+    template_name = "success.html"
