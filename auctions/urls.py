@@ -45,6 +45,7 @@ urlpatterns = [
     path("live_stream/<int:auction_id>", views.live_stream, name="live_stream"),
     path('live_stream_auction/<int:auction_id>/', views.live_stream_auction, name='live_stream_auction'),
     path('all-live-auctions/', views.all_live_auctions, name='all_live_auctions'),
+    path('contact-us/', views.contact_us, name='contact_us'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

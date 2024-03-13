@@ -1,0 +1,43 @@
+{% extends "auctions/layout.html" %}
+
+
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center" style="height: 86vh;">
+        <div class="col-lg-6 col-md-8">
+            <!-- Headline -->
+            <div class="text-center mb-4">
+                <h3>Contact Us</h3>
+            </div>
+
+            <!-- Content -->
+            <form action="{% url 'contact_us' %}"  method="post" class="px-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <input type="email" class="form-control" name="email" placeholder="Email Address">
+                </div>
+                <div class="mb-3">
+                    <input type="text" autofocus class="form-control" name="subject" placeholder="Subject" autocomplete="off">
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" cols="50" rows="10" placeholder="Your message"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <input class="btn btn-dark btn-block" type="submit" value="Submit">
+                    </div>
+                    <div class="col-6 text-right">
+                        {% if message %}
+                        <div class="text-muted small">{{ message }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

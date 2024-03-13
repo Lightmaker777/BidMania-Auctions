@@ -1,0 +1,23 @@
+/* Custom styles for the contact form */
+.contact-form {
+    background-color: #460202; /* Light gray background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(134, 59, 59, 0.1); /* Box shadow for a subtle effect */
+}
+
+.contact-form label {
+    font-weight: bold;
+}
+
+.contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form button[type="submit"] {
+    width: 100%;
+}
+.container{
+    background-color: blueviolet;
+    color: red;
+}
