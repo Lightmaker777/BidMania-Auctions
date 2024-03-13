@@ -236,24 +236,37 @@ def watchlist(request, id):
         })
 
 
+from django.shortcuts import render, redirect
+from django.http import Http404
+from django.utils import timezone
+from datetime import timedelta
+from .models import Auction, Category
+
 @login_required(login_url='login')
 def create(request):
-    # User clicks "create listing" on navbar
     if request.method == "GET":
+        categories = Category.objects.all()
         return render(request, "auctions/create.html", {
-            "categories": Category.objects.all(),
+            "categories": categories,
             "headline": "Create Listing"
         })
-    # User submits listing
-    else:
-        title = request.POST['title']
-        description = request.POST['description']
-        start_bid = request.POST['start_bid']
-        image = request.POST['image']
-        image_upload = request.POST['image_upload']
-        category = Category.objects.get(category=request.POST['category'])
+    elif request.method == "POST":
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        start_bid = request.POST.get('start_bid')
+        image = request.POST.get('image')
+        image_upload = request.POST.get('image_upload')
 
-        # Calculate the end date for the new auction (e.g., set it to 7 days from now)
+        # Retrieve category ID from the form data
+        category_id = request.POST.get('category')
+        
+        try:
+            # Retrieve category object based on the category ID
+            category = Category.objects.get(pk=category_id)
+        except (Category.DoesNotExist, ValueError):
+            # Handle invalid category ID or category not found
+            raise Http404("Invalid category ID")
+
         end_date = timezone.now() + timedelta(days=7)
 
         new_listing = Auction(
@@ -264,19 +277,16 @@ def create(request):
             image_upload=image_upload,
             category=category,
             lister=request.user,
-            end_date=end_date  # Set the end date for the auction
+            end_date=end_date
         )
 
-        # Check if an image URL is provided
         if 'image' in request.POST and request.POST['image']:
             new_listing.image = request.POST['image']
-        # Check if an image file is uploaded
         elif 'image_upload' in request.FILES:
             new_listing.image = request.FILES['image_upload']
 
         new_listing.save()
 
-        # Calculate remaining time until the auction ends
         remaining_time = new_listing.time_until_end()
 
         context = {
@@ -285,6 +295,9 @@ def create(request):
         }
 
         return render(request, 'auctions/listing.html', context)
+
+
+
 
 
 

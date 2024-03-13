@@ -36,12 +36,11 @@
                 </div>
                 <!-- Category -->
                 <div class="mb-3">
-                    <input type="text" list="category_names" class="form-control" name="category" placeholder="Category">
-                    <datalist id="category_names">
+                    <select name="category" class="form-control">
                         {% for category in categories %}
-                        <option value="{{ category }}">
+                            <option value="{{ category.id }}">{{ category.category }}</option>
                         {% endfor %}
-                    </datalist>
+                    </select>
                 </div>
                 <!-- Create listing -->
                 <div class="row">
